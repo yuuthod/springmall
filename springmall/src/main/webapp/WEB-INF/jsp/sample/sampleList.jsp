@@ -22,7 +22,7 @@
 			<div class="col-sm-1 col-md-1 col-lg-2 col-xl-2"></div>
 			<div class="col-sm-10 col-md-10 col-lg-8 col-xl-8">
 				<h1>SAMPLE LIST</h1>
-				<table class="table">
+				<table class="table table-dark table-striped">
 					<thead>
 						<tr>
 							<td>SAMPLE NO</td>

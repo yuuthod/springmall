@@ -18,38 +18,68 @@
 </style>
 <!-- jquery CDN -->
 <script type="text/javascript">
-	// jquery를 이용한 유효성 검사
+<!-- jquery CDN -->
+<script type="text/javascript">
+	$(document).ready(()=>{
+		 
+		//ID를 입력하지 않으면 다른곳으로 넘어가지 않는다.
+	    $('#sampleId').focus();
+		//FOCUS를 푸는 BLUR
+	    $('#sampleId').blur(()=>{
+	        if(!isNaN($('#sampleId').val())){
+	            $('#idHelper').text('ID는 문자만 입력하세요');
+	            $('#sampleId').focus();
+	        }else if($('#sampleId').val().length <2){
+	            $('#idHelper').text('ID는 두글자이상 입력하세요');
+	            $('#sampleId').focus();
+	        }else{
+	            $('#idHelper').text('');
+	            $('#samplePw').focus();
+	        }
+	    });
+		//버튼을 누르면 마지막 입력데이터의 유효성 검사를 하고, 일치하면 FORM을 SUBMIT시켜준다.
+	    $('#addMemberBtn').click(()=>{
+	    	if(isNaN($('#samplePw').val())){
+	            $('#pwHelper').text('PW는 숫자만 입력하세요');
+	            $('#samplePw').focus();
+	        }else if($('#samplePw').val().length <2){
+	            $('#pwHelper').text('PW는 두글자이상 입력하세요');
+	            $('#samplePw').focus();
+	        }else{
+                $('#pwHelper').text('');
+                $('#addMemberForm').submit();   
+            }
+        });
+	});
+	
+<!-- 정규표현식을 이용한 유효성 검사 
 	$(document).ready(()=>{
 		//정규표현식을 이용한 id값 유효성 검사
-		//대문자 또는 소문자 또는 숫자로 시작하는 아이디 (숫자로 시작하는 아이디x, 길이제한 없음)
-		let checkId = /^[A-za-z]/g;
-		//길이 제한 있는 식
-		//var idReg = /^[A-za-z]{5,15}/g;
-		//id값을 입력하지 않으면 다른곳으로 넘어갈 수 없다.
-		$('#sampleId').focus();
-		$('#sampleId').blur(()=>{
-			if(!checkId.test($('#sampleId').val())){
+		//대문자 또는 소문자 또는 숫자로 시작하는 2~15자리 이하의 아이디 (숫자로 시작하는 아이디x)
+		var idReg = /^[A-za-z]{2,15}/g;
+		
+		//정규표현식을 이용한 pw값 유효성 검사
+		//영문,숫자 혼합하여 6~20자리 이내
+		var checkPw = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
+		
+		//버튼을 클릭하면 아이디,비밀번호 유효성 검사
+		$('#addMemberBtn').click(()=>{
+			if(!idReg.test($('#sampleId').val())){
 				$('#idHelper').text('대문자 또는 소문자로 시작해 주세요');
 				$('#sampleId').focus();
 			}else{
 				$('#idHelper').text('');
-				$('#samplePw').focus();
-			}
-		});
-		//정규표현식을 이용한 pw값 유효성 검사
-		//영문,숫자 혼합하여 6~20자리 이내
-		let checkPw = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
-		
-		$('#addMemberBtn').click(()=>{
-			if(!checkPw.test($('#samplePw').val())){
-				$('#pwHelper').text('영문,숫자 혼합하여 6~20자리 이내로 입력해주세요');
-				$('#samplePw').focus();
-			}else{
-				$('#pwHelper').text('');
-				$('#addMemberBtn').submit(); 
+				if(!checkPw.test($('#samplePw').val())){
+					$('#pwHelper').text('영문,숫자 혼합하여 6~20자리 이내로 입력해주세요');
+					$('#samplePw').focus();
+				}else{
+					$('#idHelper').text('');
+					$('#addMemberForm').submit();
+				}
 			}
 		});
 	});
+-->
 </script>
 </head>
 <body>
@@ -58,16 +88,17 @@
 			<div class="col-md"></div>
 			<div class="col-md">
 				<h1>회원추가</h1>
-				<form action="/sample/addSample" method="post">
+				<form action="/sample/addSample" method="post" id="addMemberForm">
 					<input type="text" name="sampleId" id="sampleId" class="form-control mb-2">
 					<span id="idHelper"></span>
 					<input type="password" name="samplePw" id="samplePw" class="form-control mb-2">
 					<span id="pwHelper"></span>
-					<input type="button" id="addMemberBtn" class="btn btn-primary" value="회원추가">
+					<input type="button" value="회원추가" id="addMemberBtn">
 				</form>
 			</div>
 			<div class="col-md"></div>
 		</div>
 	</div>
+	
 </body>
 </html>
