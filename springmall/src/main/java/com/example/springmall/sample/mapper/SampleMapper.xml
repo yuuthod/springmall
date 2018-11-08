@@ -4,13 +4,28 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.example.springmall.sample.mapper.SampleMapper">
-    <select id="selectSampleAll" resultType="Map">
-        SELECT no as sampleNo, id as sampleId, pw as samplePw FROM member;
+    <!-- 모든 샘플 데이터 -->
+    <select id="selectSampleAll" resultType="Map" parameterType="Map">
+        SELECT no as sampleNo, id as sampleId, pw as samplePw FROM member ORDER BY no DESC limit #{startRow},#{rowPerPage}
     </select>
+    <!-- 샘플데이터 pageing을 위한 count -->
+    <select id="selectSampleCount" resultType="int">
+    	SELECT COUNT(*) FROM member
+    </select>
+    <!-- 샘플 삭제 -->
     <delete id="deleteSample" parameterType="int">
     	DELETE FROM member WHERE no=#{sampleNo}
     </delete>
+    <!-- 샘플 추가 -->
     <insert id="insertSample" parameterType="com.example.springmall.sample.vo.Sample">
     	INSERT INTO member(id, pw, level) VALUES(#{sampleId},#{samplePw},0)
     </insert>
+    <!-- 샘플 수정 폼 -->
+    <select id="updateSampleSelectOne" parameterType="int" resultType="com.example.springmall.sample.vo.Sample">
+    	SELECT no as sampleNo, id as sampleId, pw as samplePw FROM member WHERE no=#{sampleNo}
+    </select>
+    <!-- 샘플 수정 액션 -->
+    <update id="updateSample" parameterType="com.example.springmall.sample.vo.Sample">
+    	UPDATE member SET id=#{sampleId}, pw=#{samplePw} WHERE no=#{sampleNo}
+    </update>
 </mapper>
