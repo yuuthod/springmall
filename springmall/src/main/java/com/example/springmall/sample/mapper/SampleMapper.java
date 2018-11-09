@@ -18,10 +18,14 @@ public interface SampleMapper {
 	int deleteSample(int sampleNo);
 	// 3. insert
 	int insertSample(Sample sample);
-	// 4. update
+	// 4-1. update
 	int updateSample(Sample sample);
-	// 5. select one
+	// 4-2. update select one
 	public abstract Sample updateSampleSelectOne(int sampleNo);
 //  ─────────────── <- 이 두개가 붙어있어야 '무조건' 추상메서드인데,
 //	interface는 '추상메서드'만 가질 수 있기때문에  추상메서드에 무조건 붙어있어야 하는 public과 abstract이 생략 되어있다.
+	// 5. login select
+	Sample loginSample(Sample sample);
+	// 6-2. serch 후 select
+	List<Sample> searchSample(Map<String, Object> searchMap);
 }

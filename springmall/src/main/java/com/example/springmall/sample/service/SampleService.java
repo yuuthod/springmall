@@ -73,4 +73,14 @@ public class SampleService {
 		System.out.println("SampleService.modifySample()호출");
 		return sampleMapper.updateSample(sample);
 	}
+	
+	// 5.
+	public Sample loginSample(Sample sample) {
+		System.out.println("SampleService.loginSample()호출");
+		return sampleMapper.loginSample(sample);
+	}
+	//6
+	public List<Sample> getSearchSample(Map<String, Object> searchMap) {
+		return sampleMapper.searchSample(searchMap);
+	}
 }

@@ -1,8 +1,12 @@
 package com.example.springmall.sample.controller;
 
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,5 +82,19 @@ public class SampleController {
 		sampleService.modifySample(sample);
 		return "redirect:/sample/sampleList";
 	}
-	
+	@RequestMapping(value="/sample/searchSampleList", method=RequestMethod.GET)
+	public String getSearchSample() {
+		System.out.println("SampleController.searchSampleList().get호출");
+		return "/sample/searchForm";
+	}
+	// 6-2 검색 액션
+	@RequestMapping(value="/sample/searchSampleListAction", method=RequestMethod.GET)
+	public String getSearchSample(HttpServletRequest request, Map<String, Object> searchMap,Model model) {
+		System.out.println("SampleController.searchSampleListAction().get호출");
+		searchMap.put("category", request.getParameter("category"));
+		searchMap.put("search", request.getParameter("search"));
+		List<Sample> sampleList = sampleService.getSearchSample(searchMap);
+		model.addAttribute("sampleList",sampleList);
+		return "/sample/sampleList";
+	}
 }

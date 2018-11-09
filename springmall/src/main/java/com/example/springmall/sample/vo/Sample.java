@@ -5,6 +5,18 @@ public class Sample {
 	private String sampleId;
 	private String samplePw;
 	private int level;
+	
+	public Sample() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Sample(int sampleNo, String sampleId, String samplePw, int level) {
+		super();
+		this.sampleNo = sampleNo;
+		this.sampleId = sampleId;
+		this.samplePw = samplePw;
+		this.level = level;
+	}
 	public int getSampleNo() {
 		return sampleNo;
 	}

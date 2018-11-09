@@ -28,4 +28,23 @@
     <update id="updateSample" parameterType="com.example.springmall.sample.vo.Sample">
     	UPDATE member SET id=#{sampleId}, pw=#{samplePw} WHERE no=#{sampleNo}
     </update>
+    <!-- 샘플 로그인 -->
+    <select id="loginSample" parameterType="com.example.springmall.sample.vo.Sample" resultType="com.example.springmall.sample.vo.Sample">
+    	SELECT no as sampleNo,id as sampleId FROM member WHERE id=#{sampleId} AND pw=#{samplePw}
+    </select>
+    <!-- 검색 후 SELECT ORDER BY no DESC limit #{startRow},#{rowPerPage} -->
+    <select id="searchSample" parameterType="Map" resultType="Map">
+    	SELECT no as sampleNo,id as sampleId FROM member
+    	WHERE
+    	<choose>
+    		<when test="category == 'id'">id</when>
+    		<otherwise>
+		      no
+		    </otherwise>
+    	</choose>
+    	 = #{search}
+    </select>
 </mapper>
+
+
+
