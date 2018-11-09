@@ -15,37 +15,32 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <!-- jquery CDN -->
 <script type="text/javascript">
-	$(document).ready(()=>{
-		 
-		//ID를 입력하지 않으면 다른곳으로 넘어가지 않는다.
-	    $('#sampleId').focus();
-		//FOCUS를 푸는 BLUR
-	    $('#sampleId').blur(()=>{
-	        if(!isNaN($('#sampleId').val())){
-	            $('#idHelper').text('ID는 문자만 입력하세요');
-	            $('#sampleId').focus();
-	        }else if($('#sampleId').val().length <2){
-	            $('#idHelper').text('ID는 두글자이상 입력하세요');
-	            $('#sampleId').focus();
-	        }else{
-	            $('#idHelper').text('');
-	            $('#samplePw').focus();
-	        }
-	    });
-		//버튼을 누르면 마지막 입력데이터의 유효성 검사를 하고, 일치하면 FORM을 SUBMIT시켜준다.
-	    $('#addMemberBtn').click(()=>{
-	    	if(isNaN($('#samplePw').val())){
-	            $('#pwHelper').text('PW는 숫자만 입력하세요');
-	            $('#samplePw').focus();
-	        }else if($('#samplePw').val().length <2){
-	            $('#pwHelper').text('PW는 두글자이상 입력하세요');
-	            $('#samplePw').focus();
-	        }else{
-                $('#pwHelper').text('');
-                $('#addMemberForm').submit();   
-            }
-        });
+$(document).ready(()=>{
+	//정규표현식을 이용한 id값 유효성 검사
+	//대문자 또는 소문자로 시작하는 2~15자리 이내 (숫자로 시작 x)
+	var idReg = /^[A-Za-z]{1}[A-Za-z0-9]{3,19}$/;
+	
+	//정규표현식을 이용한 pw값 유효성 검사
+	//영문,숫자 혼합하여 6~20자리 이내
+	var checkPw = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
+	
+	//버튼을 클릭하면 아이디,비밀번호 유효성 검사
+	$('#addMemberBtn').click(()=>{
+		if(!idReg.test($('#sampleId').val())){
+			$('#idHelper').text('다시 입력하세요');
+			$('#sampleId').focus();
+		}else{
+			$('#idHelper').text('');
+			if(!checkPw.test($('#samplePw').val())){
+				$('#pwHelper').text('영문,숫자 혼합하여 6~20자리 이내로 입력해주세요');
+				$('#samplePw').focus();
+			}else{
+				$('#idHelper').text('');
+				$('#addMemberForm').submit();
+			}
+		}
 	});
+});
 </script>
 </head>
 <body>

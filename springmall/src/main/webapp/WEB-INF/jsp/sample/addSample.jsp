@@ -17,69 +17,56 @@
 	.container{margin-top:200px;}
 </style>
 <!-- jquery CDN -->
+<!--
+정규표현식
+/^  <== 줄의 처음
+$/  <== 줄의 끝 
+
+[a-z]영어 소문자 a~z까지
+[A-Z]영어 대문자 A~Z까지
+[0-9]숫자 0~9까지
+[A-Za-z0-9]영어 대문자, 소문자, 숫자 전부
+
+id유효성 검사 해석
+[A-Z-az]{1}   <== 줄의 처음에오는 {1} 한글자는 [A-Za-z](영어 대문자, 소문자)만 가능하고
+[A-Za-z0-9]{3,19}   <== [A-Za-z0-9](영어 대문자, 소문자, 숫자 전부)가 3~19자가 (위에 첫글자 1자 포함 4~20자)
+[A-Za-z0-9_]  <== _(언더바)도 입력가능
+
+pw유효성 검사 해석
+(?=.{6,20}) <== 6~20자 이내
+(?=.*[0-9]) <== 하나이상의 숫자
+(?=.*[a-zA-Z]) <== 하나이상의 대문자,소문자
+
++추가
+(?=.*?[#?!@$%^&*-]) <== 하나 이상의 특수 문자
+-->
 <script type="text/javascript">
-<!-- jquery CDN -->
-<script type="text/javascript">
-	$(document).ready(()=>{
-		 
-		//ID를 입력하지 않으면 다른곳으로 넘어가지 않는다.
-	    $('#sampleId').focus();
-		//FOCUS를 푸는 BLUR
-	    $('#sampleId').blur(()=>{
-	        if(!isNaN($('#sampleId').val())){
-	            $('#idHelper').text('ID는 문자만 입력하세요');
-	            $('#sampleId').focus();
-	        }else if($('#sampleId').val().length <2){
-	            $('#idHelper').text('ID는 두글자이상 입력하세요');
-	            $('#sampleId').focus();
-	        }else{
-	            $('#idHelper').text('');
-	            $('#samplePw').focus();
-	        }
-	    });
-		//버튼을 누르면 마지막 입력데이터의 유효성 검사를 하고, 일치하면 FORM을 SUBMIT시켜준다.
-	    $('#addMemberBtn').click(()=>{
-	    	if(isNaN($('#samplePw').val())){
-	            $('#pwHelper').text('PW는 숫자만 입력하세요');
-	            $('#samplePw').focus();
-	        }else if($('#samplePw').val().length <2){
-	            $('#pwHelper').text('PW는 두글자이상 입력하세요');
-	            $('#samplePw').focus();
-	        }else{
-                $('#pwHelper').text('');
-                $('#addMemberForm').submit();   
-            }
-        });
-	});
+$(document).ready(()=>{
+	//정규표현식을 이용한 id값 유효성 검사
+	//대문자 또는 소문자로 시작하는 2~15자리 이내 (숫자로 시작 x)
+	var idReg = /^[A-Za-z]{1}[A-Za-z0-9]{3,19}$/;
 	
-<!-- 정규표현식을 이용한 유효성 검사 
-	$(document).ready(()=>{
-		//정규표현식을 이용한 id값 유효성 검사
-		//대문자 또는 소문자 또는 숫자로 시작하는 2~15자리 이하의 아이디 (숫자로 시작하는 아이디x)
-		var idReg = /^[A-za-z]{2,15}/g;
-		
-		//정규표현식을 이용한 pw값 유효성 검사
-		//영문,숫자 혼합하여 6~20자리 이내
-		var checkPw = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
-		
-		//버튼을 클릭하면 아이디,비밀번호 유효성 검사
-		$('#addMemberBtn').click(()=>{
-			if(!idReg.test($('#sampleId').val())){
-				$('#idHelper').text('대문자 또는 소문자로 시작해 주세요');
-				$('#sampleId').focus();
+	//정규표현식을 이용한 pw값 유효성 검사
+	//영문,숫자 혼합하여 6~20자리 이내
+	var checkPw = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
+	
+	//버튼을 클릭하면 아이디,비밀번호 유효성 검사
+	$('#addMemberBtn').click(()=>{
+		if(!idReg.test($('#sampleId').val())){
+			$('#idHelper').text('다시 입력하세요');
+			$('#sampleId').focus();
+		}else{
+			$('#idHelper').text('');
+			if(!checkPw.test($('#samplePw').val())){
+				$('#pwHelper').text('영문,숫자 혼합하여 6~20자리 이내로 입력해주세요');
+				$('#samplePw').focus();
 			}else{
 				$('#idHelper').text('');
-				if(!checkPw.test($('#samplePw').val())){
-					$('#pwHelper').text('영문,숫자 혼합하여 6~20자리 이내로 입력해주세요');
-					$('#samplePw').focus();
-				}else{
-					$('#idHelper').text('');
-					$('#addMemberForm').submit();
-				}
+				$('#addMemberForm').submit();
 			}
-		});
+		}
 	});
--->
+});
 </script>
 </head>
 <body>
