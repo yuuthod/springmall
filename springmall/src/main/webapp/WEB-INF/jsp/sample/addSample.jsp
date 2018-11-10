@@ -55,13 +55,14 @@ $(document).ready(()=>{
 		if(!idReg.test($('#sampleId').val())){
 			$('#idHelper').text('다시 입력하세요');
 			$('#sampleId').focus();
+			$('#pwHelper').text('');
 		}else{
 			$('#idHelper').text('');
 			if(!checkPw.test($('#samplePw').val())){
 				$('#pwHelper').text('영문,숫자 혼합하여 6~20자리 이내로 입력해주세요');
 				$('#samplePw').focus();
 			}else{
-				$('#idHelper').text('');
+				$('#pwHelper').text('');
 				$('#addMemberForm').submit();
 			}
 		}
