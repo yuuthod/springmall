@@ -74,6 +74,19 @@
 						</c:choose>
 					</div>
 				</div>
+				<!-- 검색 -->
+				<div>
+					<form action="/sample/searchAction" method="get">
+						<select name="category">
+							<option value="">==선택==</option>	
+							<option value="no">NO</option>	
+							<option value="id">ID</option>
+							<option value="level">LEVEL</option>
+						</select>
+						<input type="text" name="search">
+						<input type="submit" value="검색">
+					</form>
+				</div>
 			</div>
 			<div class="col-sm-1 col-md-1 col-lg-2 col-xl-2"></div>
 		</div>

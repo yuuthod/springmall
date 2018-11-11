@@ -82,17 +82,13 @@ public class SampleController {
 		sampleService.modifySample(sample);
 		return "redirect:/sample/sampleList";
 	}
-	@RequestMapping(value="/sample/searchSampleList", method=RequestMethod.GET)
-	public String getSearchSample() {
-		System.out.println("SampleController.searchSampleList().get호출");
-		return "/sample/searchForm";
-	}
 	// 6-2 검색 액션
-	@RequestMapping(value="/sample/searchSampleListAction", method=RequestMethod.GET)
+	@RequestMapping(value="/sample/searchAction", method=RequestMethod.GET)
 	public String getSearchSample(HttpServletRequest request, Map<String, Object> searchMap,Model model) {
-		System.out.println("SampleController.searchSampleListAction().get호출");
+		System.out.println("SampleController.searchAction().get호출");
 		searchMap.put("category", request.getParameter("category"));
 		searchMap.put("search", request.getParameter("search"));
+		System.out.println(request.getParameter("currentPage") + " <--currentPage");
 		List<Sample> sampleList = sampleService.getSearchSample(searchMap);
 		model.addAttribute("sampleList",sampleList);
 		return "/sample/sampleList";

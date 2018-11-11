@@ -32,17 +32,15 @@
     <select id="loginSample" parameterType="com.example.springmall.sample.vo.Sample" resultType="com.example.springmall.sample.vo.Sample">
     	SELECT no as sampleNo,id as sampleId FROM member WHERE id=#{sampleId} AND pw=#{samplePw}
     </select>
-    <!-- 검색 후 SELECT ORDER BY no DESC limit #{startRow},#{rowPerPage} -->
+    <!-- 검색 후 SELECT  ORDER BY no DESC limit #{startRow},#{rowPerPage} -->
     <select id="searchSample" parameterType="Map" resultType="Map">
     	SELECT no as sampleNo,id as sampleId FROM member
-    	WHERE
     	<choose>
-    		<when test="category == 'id'">id</when>
-    		<otherwise>
-		      no
-		    </otherwise>
+    		<when test="category == 'id'">WHERE id = #{search}</when>
+            <when test="category == 'no'">WHERE no = #{search}</when>
+            <when test="category == 'level'">WHERE level = #{search}</when>
+    		<otherwise></otherwise>
     	</choose>
-    	 = #{search}
     </select>
 </mapper>
 
