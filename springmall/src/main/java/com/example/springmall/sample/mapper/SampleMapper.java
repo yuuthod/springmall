@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.springmall.sample.vo.Sample;
+import com.example.springmall.sample.vo.SampleRequest;
 
 // Spring 이라고 전부 객체를 생성하는건 아니다. 약속된 Annotation이 붙어있어야 한다.
 @Mapper

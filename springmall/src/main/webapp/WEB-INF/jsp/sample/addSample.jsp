@@ -90,11 +90,12 @@ $(document).ready(()=>{
 			<div class="col-md"></div>
 			<div class="col-md">
 				<h1>회원추가</h1>
-				<form action="/sample/addSample" method="post" onsubmit="return check">
-					<input type="text" name="sampleId" id="sampleId" class="form-control mb-2">
+				<form action="/sample/addSample" method="post" enctype="multipart/form-data">
+					ID : <input type="text" name="sampleId" id="sampleId" class="form-control mb-2">
 					<span id="idHelper"></span>
-					<input type="password" name="samplePw" id="samplePw" class="form-control mb-2">
+					PW : <input type="password" name="samplePw" id="samplePw" class="form-control mb-2">
 					<span id="pwHelper"></span>
+					FILE : <input type="file" name="multipartfile" >
 					<input type="submit" value="회원추가" id="addMemberBtn">
 				</form>
 			</div>

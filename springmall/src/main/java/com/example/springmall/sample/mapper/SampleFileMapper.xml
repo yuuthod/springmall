@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.example.springmall.sample.mapper.SampleFileMapper">
+	<!-- 샘플 파일테이블에 추가 -->
+    <insert id="insertSampleFile" parameterType="com.example.springmall.sample.vo.SampleFile">
+
+        INSERT INTO samplefile(
+            sample_no,
+            samplefile_path,
+            samplefile_name,
+            samplefile_extention,
+            samplefile_file,
+            samplefile_size,
+            samplefile_date
+        ) 
+        VALUES(
+            #{sampleNo},
+            #{samplefilePath},
+            #{samplefileName},
+            #{samplefileExtention},
+            #{samplefileFile},
+            #{samplefileSize},
+            now()
+        )
+    </insert>
+</mapper>

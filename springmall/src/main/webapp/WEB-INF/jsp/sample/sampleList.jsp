@@ -76,7 +76,7 @@
 				</div>
 				<!-- 검색 -->
 				<div>
-					<form action="/sample/searchAction" method="get">
+					<form action="/sample/sampleList" method="get">
 						<select name="category">
 							<option value="">==선택==</option>	
 							<option value="no">NO</option>	

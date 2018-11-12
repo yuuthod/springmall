@@ -1,5 +1,6 @@
 package com.example.springmall.sample.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.springmall.sample.service.SampleService;
 import com.example.springmall.sample.vo.Sample;
+import com.example.springmall.sample.vo.SampleRequest;
 
 @Controller
 public class SampleController {
@@ -26,9 +28,27 @@ public class SampleController {
 	
 	// 1. 샘플목록
 	@RequestMapping(value="/sample/sampleList",method=RequestMethod.GET)
-	public String sampleList(Model model, @RequestParam(value="currentPage", defaultValue="1") int currentPage) {
+	public String sampleList(Model model, HttpServletRequest request) {
 		System.out.println("SampleController.sampleList()호출");
-		Map<String, Object> listPageAll = sampleService.getSampleAll(currentPage);
+		
+		// 검색 데이터
+		// 검색을 하지 않은 상황을 대비해 param값이 있으면 map에 데이터가 들어가도록 if문 사용
+		Map<String, Object> searchMap = new HashMap<>();
+		
+		if(request.getParameter("category") != null) {
+			searchMap.put("category", request.getParameter("category"));
+		}
+		if(request.getParameter("search") != null) {
+			searchMap.put("search", request.getParameter("search"));
+		}
+		//현재페이지
+		int currentPage = 1;
+		if(request.getParameter("currentPage") != null) {
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		}
+		searchMap.put("currentPage", currentPage);
+		
+		Map<String, Object> listPageAll = sampleService.getSampleAll(searchMap);
 		
 		model.addAttribute("sampleList", listPageAll.get("list"));
 		model.addAttribute("lastPage", listPageAll.get("lastPage"));
@@ -54,11 +74,13 @@ public class SampleController {
 	}
 	// 3-2.입력 액션
 	@RequestMapping(value="/sample/addSample", method=RequestMethod.POST)
-	public String addSample(Sample sample) {
+	public String addSample(SampleRequest sampleRequest) {
 		System.out.println("SampleController.addSample().post호출");
 		// Sample 의 다양한 모양이 존재할 수 있다.
 		// command객체의 멤버변수 == input태그 name속성 --> setter에 입력 
-		sampleService.addSample(sample);
+		System.out.println("sampleRequest.getMultipartFile() :" + sampleRequest.getMultipartfile());
+		
+		sampleService.addSample(sampleRequest);
 		return "redirect:/sample/sampleList";
 	}
 	

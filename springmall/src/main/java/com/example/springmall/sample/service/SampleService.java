@@ -1,15 +1,22 @@
 package com.example.springmall.sample.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.springmall.sample.mapper.SampleFileMapper;
 import com.example.springmall.sample.mapper.SampleMapper;
 import com.example.springmall.sample.vo.Sample;
+import com.example.springmall.sample.vo.SampleFile;
+import com.example.springmall.sample.vo.SampleRequest;
 
 @Service
 @Transactional
@@ -17,17 +24,81 @@ public class SampleService {
 	@Autowired
 	private SampleMapper sampleMapper;
 	
-	//		쿼리 -> 자바
+	@Autowired
+	private SampleFileMapper sampleFileMapper;
+	
+	//	쿼리 -> 자바
 	// select -> get
 	// insert -> add
 	// update -> modify
 	// delete -> remove
 	
+	// 3 입력 액션 수정
+	public int addSample(SampleRequest sampleRequest) {
+		Sample sample = new Sample();
+		
+		sample.setSampleId(sampleRequest.getSampleId());
+		sample.setSamplePw(sampleRequest.getSamplePw());
+		sampleMapper.insertSample(sample); 
+
+		SampleFile sampleFile = new SampleFile();
+		MultipartFile multipartFile = sampleRequest.getMultipartfile();
+		
+		// 1. samplefileNo : AutoIncrement
+		// 2. sampleNo
+		sampleFile.setSampleNo(sample.getSampleNo());
+		
+		// 3. samplefilePath
+		String path = "c:\\uploads"; //복잡한 루틴을 통해서
+		sampleFile.setSamplefilePath(path);
+		
+		// 4. 확장자 추출
+		// originalFileName : 이름.확장자
+		String originalFileName = multipartFile.getOriginalFilename();
+		System.out.println("originalFileName: " + originalFileName);
+		int idx = originalFileName.lastIndexOf(".");
+		String ext = originalFileName.substring(idx+1);
+		System.out.println("ext: " + ext);
+		sampleFile.setSamplefileExtention(ext);
+		
+		// 5. 파일이름
+		//파일이름 UUID를 이용해 랜덤으로 생성 , UUID타입에서 다시 스트링으로 변경
+		String fileName = UUID.randomUUID().toString();
+		System.out.println("fileName: " + fileName);
+		sampleFile.setSamplefileName(fileName);			
+		
+		// 6. 타입
+		sampleFile.setSamplefileFile(multipartFile.getContentType());
+		
+		// 7. 크기
+		sampleFile.setSamplefileSize(multipartFile.getSize());
+		
+		// 파일업로드
+		// 1. 내가 원하는 이름의 빈파일을 하나 만들자
+		// transferTo()의 매개변수 타입에 맞춘 후 입력데이터
+		File f = new File(path+"\\"+fileName+"."+ext);
+		System.out.println("f: " + f);
+		// 2. multipartFile파일을 빈파일로 복사하자.
+		try {
+			multipartFile.transferTo(f);
+			System.out.println("예외처리도 잘 실행");
+		} catch (IllegalStateException e) { //상태오류
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		sampleFileMapper.insertSampleFile(sampleFile);
+		return 0;
+	}
+	
+	
+	
 	// 1 
-	public Map<String, Object> getSampleAll(int currentPage){
+	public Map<String, Object> getSampleAll(Map<String, Object> searchMap){
 		System.out.println("SampleService.getSampleAll()호출");
 		// 페이징과 관련 코드 -- begin
-		// currentPage : 현재페이지
+		int currentPage = (int)searchMap.get("currentPage");
 		int rowPerPage = 10;
 		int startRow = (int)((double)(currentPage-1)*rowPerPage);
 		int countRow = sampleMapper.selectSampleCount();
@@ -40,6 +111,11 @@ public class SampleService {
 		resultPage.put("startRow", startRow);
 		resultPage.put("rowPerPage", rowPerPage);
 		// 페이징과 관련 코드 -- end
+		
+		//검색
+		resultPage.put("category", searchMap.get("category"));
+		resultPage.put("search", searchMap.get("search"));
+		
 		// map으로 묶은 limit 데이터들을 입력데이터로 보냄.
 		List<Sample> list = sampleMapper.selectSampleAll(resultPage);
 		//리스트와 화면에 보내줘야할 currentPage와 lastPage를 map으로 묶어 리턴
@@ -54,12 +130,6 @@ public class SampleService {
 	public void removeSample(int sampleNo){
 		System.out.println("SampleService.removeSample()호출");
 		sampleMapper.deleteSample(sampleNo);
-	}
-	
-	// 3
-	public void addSample(Sample sample) {
-		System.out.println("SampleService.addSample()호출");
-		sampleMapper.insertSample(sample);
 	}
 	
 	// 4-1

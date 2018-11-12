@@ -6,39 +6,49 @@
 <mapper namespace="com.example.springmall.sample.mapper.SampleMapper">
     <!-- 모든 샘플 데이터 -->
     <select id="selectSampleAll" resultType="Map" parameterType="Map">
-        SELECT no as sampleNo, id as sampleId, pw as samplePw FROM member ORDER BY no DESC limit #{startRow},#{rowPerPage}
+        SELECT sample_no as sampleNo, sample_id as sampleId, sample_pw as samplePw
+        FROM sample 
+        <choose>
+    		<when test="category == 'id'">WHERE sample_id = #{search}</when>
+            <when test="category == 'no'">WHERE sample_no = #{search}</when>
+    		<otherwise></otherwise>
+    	</choose>
+    	ORDER BY sample_no
+        DESC limit #{startRow},#{rowPerPage}
     </select>
     <!-- 샘플데이터 pageing을 위한 count -->
     <select id="selectSampleCount" resultType="int">
-    	SELECT COUNT(*) FROM member
+    	SELECT COUNT(*) FROM sample
     </select>
     <!-- 샘플 삭제 -->
     <delete id="deleteSample" parameterType="int">
-    	DELETE FROM member WHERE no=#{sampleNo}
+    	DELETE FROM sample WHERE no=#{sampleNo}
     </delete>
     <!-- 샘플 추가 -->
     <insert id="insertSample" parameterType="com.example.springmall.sample.vo.Sample">
-    	INSERT INTO member(id, pw, level) VALUES(#{sampleId},#{samplePw},0)
+    	INSERT INTO sample(sample_id, sample_pw) VALUES(#{sampleId},#{samplePw});
+    	<selectKey resultType="int" keyProperty="sampleNo" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert>
     <!-- 샘플 수정 폼 -->
     <select id="updateSampleSelectOne" parameterType="int" resultType="com.example.springmall.sample.vo.Sample">
-    	SELECT no as sampleNo, id as sampleId, pw as samplePw FROM member WHERE no=#{sampleNo}
+    	SELECT sample_no as sampleNo, sample_id as sampleId, sample_pw as samplePw FROM sample WHERE sample_no=#{sampleNo}
     </select>
     <!-- 샘플 수정 액션 -->
     <update id="updateSample" parameterType="com.example.springmall.sample.vo.Sample">
-    	UPDATE member SET id=#{sampleId}, pw=#{samplePw} WHERE no=#{sampleNo}
+    	UPDATE sample SET sample_id=#{sampleId}, sample_pw=#{samplePw} WHERE no=#{sampleNo}
     </update>
     <!-- 샘플 로그인 -->
     <select id="loginSample" parameterType="com.example.springmall.sample.vo.Sample" resultType="com.example.springmall.sample.vo.Sample">
-    	SELECT no as sampleNo,id as sampleId FROM member WHERE id=#{sampleId} AND pw=#{samplePw}
+    	SELECT sample_no as sampleNo,sample_id as sampleId FROM sample WHERE sample_no=#{sampleId} AND sample_pw=#{samplePw}
     </select>
     <!-- 검색 후 SELECT  ORDER BY no DESC limit #{startRow},#{rowPerPage} -->
     <select id="searchSample" parameterType="Map" resultType="Map">
-    	SELECT no as sampleNo,id as sampleId FROM member
+    	SELECT sample_no as sampleNo,sample_id as sampleId FROM sample
     	<choose>
-    		<when test="category == 'id'">WHERE id = #{search}</when>
-            <when test="category == 'no'">WHERE no = #{search}</when>
-            <when test="category == 'level'">WHERE level = #{search}</when>
+    		<when test="category == 'id'">WHERE sample_id = #{search}</when>
+            <when test="category == 'no'">WHERE sample_no = #{search}</when>
     		<otherwise></otherwise>
     	</choose>
     </select>

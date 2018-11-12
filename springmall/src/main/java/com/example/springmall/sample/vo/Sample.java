@@ -5,7 +5,7 @@ public class Sample {
 	private String sampleId;
 	private String samplePw;
 	private int level;
-	
+	//private SampleFile sampleFile;
 	public Sample() {
 		super();
 		// TODO Auto-generated constructor stub
