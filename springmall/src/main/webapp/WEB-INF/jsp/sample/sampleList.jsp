@@ -74,7 +74,7 @@
 							<tr>
 								<td>${ sample.sampleNo }</td>
 								<td>${ sample.sampleId }</td>
-								<td>${ sample.samplefilePath }<span>\</span>${ sample.samplefileName }<span>.</span>${ sample.samplefileExtention }</td>
+								<td>${ sample.samplefilePath }<span>\</span>${ sample.samplefileName }<span>.</span>${ sample.samplefileExt }</td>
 								<td>${ sample.samplefileDate }</td>
 								<td><a href="/sample/removeSample?sampleNo=${ sample.sampleNo }">DELETE</a></td>
 								<td><a href="/sample/modyfySample?sampleNo=${ sample.sampleNo }">UPDATE</a></td>

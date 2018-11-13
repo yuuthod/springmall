@@ -11,7 +11,7 @@
             sample_no,
             samplefile_path,
             samplefile_name,
-            samplefile_extention,
+            samplefile_ext,
             samplefile_file,
             samplefile_size,
             samplefile_date
@@ -20,7 +20,7 @@
             #{sampleNo},
             #{samplefilePath},
             #{samplefileName},
-            #{samplefileExtention},
+            #{samplefileExt},
             #{samplefileFile},
             #{samplefileSize},
             now()
@@ -37,7 +37,7 @@
     	SELECT
     		sf.samplefile_path as samplefilePath
 			,sf.samplefile_name as samplefileName
-			,sf.samplefile_extention as samplefileExtention
+			,sf.samplefile_ext as samplefileExt
 		FROM samplefile as sf
 		WHERE sample_no=#{sampleNo}
     </select>

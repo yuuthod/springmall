@@ -11,7 +11,7 @@
         ,s.sample_id as sampleId
         ,sf.samplefile_path as samplefilePath
         ,sf.samplefile_name as samplefileName
-        ,sf.samplefile_extention as samplefileExtention
+        ,sf.samplefile_ext as samplefileExt
         ,sf.samplefile_date as samplefileDate
 		FROM sample as s
 		INNER JOIN samplefile as sf
@@ -20,7 +20,7 @@
     		<when test="category == 'id'">WHERE s.sample_id = #{search}</when>
             <when test="category == 'no'">WHERE s.sample_no = #{search}</when>
             <when test="category == 'fileName'">WHERE sf.samplefile_name = #{search}</when>
-            <when test="category == 'fileExt'">WHERE sf.samplefile_extention = #{search}</when>
+            <when test="category == 'fileExt'">WHERE sf.samplefile_ext = #{search}</when>
     		<otherwise></otherwise>
     	</choose>
     	ORDER BY s.sample_no
@@ -36,7 +36,7 @@
     		<when test="category == 'id'">WHERE s.sample_id = #{search}</when>
             <when test="category == 'no'">WHERE s.sample_no = #{search}</when>
             <when test="category == 'fileName'">WHERE sf.samplefile_name = #{search}</when>
-            <when test="category == 'fileExt'">WHERE sf.samplefile_extention = #{search}</when>
+            <when test="category == 'fileExt'">WHERE sf.samplefile_ext = #{search}</when>
     		<otherwise></otherwise>
     	</choose>
     </select>

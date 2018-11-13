@@ -10,7 +10,7 @@ public class SampleFile {
 	//multipartFile 이 실행되면서 데이터생성
 	private String samplefilePath;
 	private String samplefileName;
-	private String samplefileExtention;
+	private String samplefileExt;
 	private String samplefileFile;
 	private long samplefileSize;
 	private Date samplefileDate;
@@ -38,11 +38,11 @@ public class SampleFile {
 	public void setSamplefileName(String samplefileName) {
 		this.samplefileName = samplefileName;
 	}
-	public String getSamplefileExtention() {
-		return samplefileExtention;
+	public String getSamplefileExt() {
+		return samplefileExt;
 	}
-	public void setSamplefileExtention(String samplefileExtention) {
-		this.samplefileExtention = samplefileExtention;
+	public void setSamplefileExt(String samplefileExt) {
+		this.samplefileExt = samplefileExt;
 	}
 	public String getSamplefileFile() {
 		return samplefileFile;
@@ -62,5 +62,6 @@ public class SampleFile {
 	public void setSamplefileDate(Date samplefileDate) {
 		this.samplefileDate = samplefileDate;
 	}
+	
 	
 }

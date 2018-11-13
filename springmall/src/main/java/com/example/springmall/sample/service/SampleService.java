@@ -60,7 +60,7 @@ public class SampleService {
 		int idx = originalFileName.lastIndexOf(".");
 		String ext = originalFileName.substring(idx+1);
 		System.out.println("ext: " + ext);
-		sampleFile.setSamplefileExtention(ext);
+		sampleFile.setSamplefileExt(ext);
 		
 		// 5. 파일이름
 		//파일이름 UUID를 이용해 랜덤으로 생성 , UUID타입에서 다시 스트링으로 변경
@@ -145,7 +145,7 @@ public class SampleService {
 		SampleFile sampleFile = sampleFileMapper.deleteFolderSampleFile(sampleNo);
 		String path = sampleFile.getSamplefilePath();
 		String name = sampleFile.getSamplefileName();
-		String ext = sampleFile.getSamplefileExtention();
+		String ext = sampleFile.getSamplefileExt();
 		
 		String pathAll = path+"\\"+name+"."+ext; // 삭제할 파일의 경로
 		System.out.println(pathAll + "<== pathAll");

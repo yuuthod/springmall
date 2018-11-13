@@ -7,7 +7,7 @@ public class SampleAndFileList {
 	private String sampleId;
 	private String samplefilePath;
 	private String samplefileName;
-	private String samplefileExtention;
+	private String samplefileExt;
 	private Date samplefileDate;
 	public int getSampleNo() {
 		return sampleNo;
@@ -33,11 +33,11 @@ public class SampleAndFileList {
 	public void setSamplefileName(String samplefileName) {
 		this.samplefileName = samplefileName;
 	}
-	public String getSamplefileExtention() {
-		return samplefileExtention;
+	public String getSamplefileExt() {
+		return samplefileExt;
 	}
-	public void setSamplefileExtention(String samplefileExtention) {
-		this.samplefileExtention = samplefileExtention;
+	public void setSamplefileExt(String samplefileExt) {
+		this.samplefileExt = samplefileExt;
 	}
 	public Date getSamplefileDate() {
 		return samplefileDate;
@@ -45,5 +45,6 @@ public class SampleAndFileList {
 	public void setSamplefileDate(Date samplefileDate) {
 		this.samplefileDate = samplefileDate;
 	}
+	
 	
 }
