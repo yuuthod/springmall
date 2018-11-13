@@ -26,4 +26,20 @@
             now()
         )
     </insert>
+    
+    <!-- 샘플파일 삭제 -->
+    <delete id="deleteSampleFile" parameterType="int">
+    	DELETE FROM samplefile WHERE sample_no=#{sampleNo}
+    </delete>
+    
+    <!-- 샘플파일 삭제 전 폴더 안 파일을 삭제하기 위해 파일 주소 로드 -->
+    <select id="deleteFolderSampleFile" parameterType="int" resultType="com.example.springmall.sample.vo.SampleFile">
+    	SELECT
+    		sf.samplefile_path as samplefilePath
+			,sf.samplefile_name as samplefileName
+			,sf.samplefile_extention as samplefileExtention
+		FROM samplefile as sf
+		WHERE sample_no=#{sampleNo}
+    </select>
+    
 </mapper>

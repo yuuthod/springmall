@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.springmall.sample.mapper.SampleFileMapper;
 import com.example.springmall.sample.mapper.SampleMapper;
 import com.example.springmall.sample.vo.Sample;
+import com.example.springmall.sample.vo.SampleAndFileList;
 import com.example.springmall.sample.vo.SampleFile;
 import com.example.springmall.sample.vo.SampleRequest;
 
@@ -73,12 +74,12 @@ public class SampleService {
 		// 7. 크기
 		sampleFile.setSamplefileSize(multipartFile.getSize());
 		
-		// 파일업로드
-		// 1. 내가 원하는 이름의 빈파일을 하나 만들자
-		// transferTo()의 매개변수 타입에 맞춘 후 입력데이터
+		// 	파일업로드
+		//	1. 내가 원하는 이름의 빈파일을 하나 만들자
+		//	transferTo()의 매개변수 타입에 맞춘 후 입력데이터
 		File f = new File(path+"\\"+fileName+"."+ext);
 		System.out.println("f: " + f);
-		// 2. multipartFile파일을 빈파일로 복사하자.
+		//	2. multipartFile파일을 빈파일로 복사하자.
 		try {
 			multipartFile.transferTo(f);
 			System.out.println("예외처리도 잘 실행");
@@ -97,39 +98,64 @@ public class SampleService {
 	// 1 
 	public Map<String, Object> getSampleAll(Map<String, Object> searchMap){
 		System.out.println("SampleService.getSampleAll()호출");
-		// 페이징과 관련 코드 -- begin
+		//	페이징과 관련 코드 -- begin
 		int currentPage = (int)searchMap.get("currentPage");
-		int rowPerPage = 10;
+		int rowPerPage = 5;
 		int startRow = (int)((double)(currentPage-1)*rowPerPage);
-		int countRow = sampleMapper.selectSampleCount();
+		
+		//	검색 후 마지막 페이지를 구하기 위해
+		Map<String, Object> searchCount = new HashMap<>();
+		searchCount.put("category", searchMap.get("category"));
+		searchCount.put("search", searchMap.get("search"));
+		int countRow = sampleMapper.selectSampleCount(searchCount);
+		
 		int lastPage = (int)((double)countRow/rowPerPage);
 		if(countRow%rowPerPage != 0) {
 			lastPage++;
 		}
+		
 		System.out.println("startRow :"+startRow +"/countRow :"+countRow +"/lastPage :"+lastPage +"<--SampleService.getSampleAll");
 		Map<String, Object> resultPage = new HashMap<>();
 		resultPage.put("startRow", startRow);
 		resultPage.put("rowPerPage", rowPerPage);
-		// 페이징과 관련 코드 -- end
+		//	페이징과 관련 코드 -- end
 		
-		//검색
+		//	검색
 		resultPage.put("category", searchMap.get("category"));
 		resultPage.put("search", searchMap.get("search"));
 		
 		// map으로 묶은 limit 데이터들을 입력데이터로 보냄.
-		List<Sample> list = sampleMapper.selectSampleAll(resultPage);
-		//리스트와 화면에 보내줘야할 currentPage와 lastPage를 map으로 묶어 리턴
+		List<SampleAndFileList> list = sampleMapper.selectSampleAll(resultPage);
+		//	리스트와 화면에 보내줘야할 currentPage와 lastPage를 map으로 묶어 리턴
 		Map<String, Object> listPageAll = new HashMap<>();
 		listPageAll.put("lastPage", lastPage);
 		listPageAll.put("list", list);
 		listPageAll.put("currentPage", currentPage);
+		
 		return listPageAll;
 	}
 	
 	// 2
-	public void removeSample(int sampleNo){
+	//	파일 삭제 후 sample삭제
+	public int removeSample(int sampleNo){
 		System.out.println("SampleService.removeSample()호출");
-		sampleMapper.deleteSample(sampleNo);
+		
+		//	폴더 안 파일삭제
+		//	파일 주소값을 불러오기 위한 select
+		SampleFile sampleFile = sampleFileMapper.deleteFolderSampleFile(sampleNo);
+		String path = sampleFile.getSamplefilePath();
+		String name = sampleFile.getSamplefileName();
+		String ext = sampleFile.getSamplefileExtention();
+		
+		String pathAll = path+"\\"+name+"."+ext; // 삭제할 파일의 경로
+		System.out.println(pathAll + "<== pathAll");
+		File file = new File(pathAll);
+		file.delete();
+		
+		//file 삭제
+		sampleFileMapper.deleteSampleFile(sampleNo);
+		//sample 삭제
+		return sampleMapper.deleteSample(sampleNo);
 	}
 	
 	// 4-1
@@ -148,9 +174,5 @@ public class SampleService {
 	public Sample loginSample(Sample sample) {
 		System.out.println("SampleService.loginSample()호출");
 		return sampleMapper.loginSample(sample);
-	}
-	//6
-	public List<Sample> getSearchSample(Map<String, Object> searchMap) {
-		return sampleMapper.searchSample(searchMap);
 	}
 }

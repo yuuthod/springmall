@@ -6,23 +6,43 @@
 <mapper namespace="com.example.springmall.sample.mapper.SampleMapper">
     <!-- 모든 샘플 데이터 -->
     <select id="selectSampleAll" resultType="Map" parameterType="Map">
-        SELECT sample_no as sampleNo, sample_id as sampleId, sample_pw as samplePw
-        FROM sample 
+        SELECT 
+         s.sample_no as sampleNo
+        ,s.sample_id as sampleId
+        ,sf.samplefile_path as samplefilePath
+        ,sf.samplefile_name as samplefileName
+        ,sf.samplefile_extention as samplefileExtention
+        ,sf.samplefile_date as samplefileDate
+		FROM sample as s
+		INNER JOIN samplefile as sf
+		ON s.sample_no = sf.sample_no
         <choose>
-    		<when test="category == 'id'">WHERE sample_id = #{search}</when>
-            <when test="category == 'no'">WHERE sample_no = #{search}</when>
+    		<when test="category == 'id'">WHERE s.sample_id = #{search}</when>
+            <when test="category == 'no'">WHERE s.sample_no = #{search}</when>
+            <when test="category == 'fileName'">WHERE sf.samplefile_name = #{search}</when>
+            <when test="category == 'fileExt'">WHERE sf.samplefile_extention = #{search}</when>
     		<otherwise></otherwise>
     	</choose>
-    	ORDER BY sample_no
+    	ORDER BY s.sample_no
         DESC limit #{startRow},#{rowPerPage}
     </select>
-    <!-- 샘플데이터 pageing을 위한 count -->
-    <select id="selectSampleCount" resultType="int">
-    	SELECT COUNT(*) FROM sample
+    <!-- 샘플데이터 pageing을 위한 count / 검색 후 페이징을 위해 choose문 추가 -->
+    <select id="selectSampleCount" resultType="int" parameterType="Map">
+    	SELECT COUNT(*)
+    	FROM sample as s
+		INNER JOIN samplefile as sf
+		ON s.sample_no = sf.sample_no
+    	<choose>
+    		<when test="category == 'id'">WHERE s.sample_id = #{search}</when>
+            <when test="category == 'no'">WHERE s.sample_no = #{search}</when>
+            <when test="category == 'fileName'">WHERE sf.samplefile_name = #{search}</when>
+            <when test="category == 'fileExt'">WHERE sf.samplefile_extention = #{search}</when>
+    		<otherwise></otherwise>
+    	</choose>
     </select>
     <!-- 샘플 삭제 -->
     <delete id="deleteSample" parameterType="int">
-    	DELETE FROM sample WHERE no=#{sampleNo}
+    	DELETE FROM sample WHERE sample_no=#{sampleNo}
     </delete>
     <!-- 샘플 추가 -->
     <insert id="insertSample" parameterType="com.example.springmall.sample.vo.Sample">

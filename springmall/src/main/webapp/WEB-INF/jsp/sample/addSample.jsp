@@ -15,6 +15,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <style>
 	.container{margin-top:200px;}
+	#idHelper, #pwHelper, #fileHelper{
+		color: red;
+	}
 </style>
 <!-- jquery CDN -->
 <!--
@@ -39,46 +42,33 @@ pw유효성 검사 해석
 
 +추가
 (?=.*?[#?!@$%^&*-]) <== 하나 이상의 특수 문자
-
---이벤트를 강제 종료해서 유효성 검사
-	$(document).ready(function(){
-		$('form').submit(function(event){
-			if($('#sampleId').val().length == 0){
-				$('#idHelper').text('유효성검사 실패');
-				//이벤트 중단
-				event.preventDefault();
-			}else{
-				$('#idHelper').text('유효성검사 성공');
-				event.preventDefault();
-			}
-		});
-	});
---리턴값을 이용해 이벤트 강제종료
-$(document).ready(()=>{
-	$('#addMemberForm').submit(()=>{
-		if($('#sampleId').val().length == 0){
-			$('#idHelper').text('유효성검사 실패');
-			//false를 보내는게
-			//event.preventDefault()를 
-			return false;
-		}else{
-			$('#idHelper').text('유효성검사 성공');
-			return true;
-		}
-	});
-});
 -->
 <script type="text/javascript">
 $(document).ready(()=>{
-	$('#addMemberForm').submit(()=>{
-		if($('#sampleId').val().length == 0){
-			$('#idHelper').text('유효성검사 실패');
-			//false를 보내는게
-			//event.preventDefault()를 
-			return false;
+	//정규표현식을 이용한 id값 유효성 검사
+	//대문자 또는 소문자로 시작하는 2~15자리 이내 (숫자로 시작 x)
+	var idReg = /^[A-Za-z]{1}[A-Za-z0-9]{3,19}$/;
+	
+	//정규표현식을 이용한 pw값 유효성 검사
+	//영문,숫자 혼합하여 6~20자리 이내
+	var checkPw = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
+	
+	//버튼을 클릭하면 아이디,비밀번호 유효성 검사
+	$('#addBtn').click(()=>{
+		if(!idReg.test($('#sampleId').val())){
+			$('#idHelper').text('다시 입력하세요');
+			$('#sampleId').focus();
+			$('#pwHelper').text('');
+		}else if(!checkPw.test($('#samplePw').val())){
+			$('#idHelper').text('');
+			$('#pwHelper').text('영문,숫자 혼합하여 6~20자리 이내로 입력해주세요');
+			$('#samplePw').focus();
+		}else if(!$('#multipartfile').val()){
+			$('#pwHelper').text('');
+			$('#fileHelper').text('파일을 업로드 해주세요');
 		}else{
-			$('#idHelper').text('유효성검사 성공');
-			return true;
+			$('#fileHelper').text('');
+			$('#addMemberForm').submit();
 		}
 	});
 });
@@ -90,13 +80,20 @@ $(document).ready(()=>{
 			<div class="col-md"></div>
 			<div class="col-md">
 				<h1>회원추가</h1>
-				<form action="/sample/addSample" method="post" enctype="multipart/form-data">
-					ID : <input type="text" name="sampleId" id="sampleId" class="form-control mb-2">
-					<span id="idHelper"></span>
-					PW : <input type="password" name="samplePw" id="samplePw" class="form-control mb-2">
-					<span id="pwHelper"></span>
-					FILE : <input type="file" name="multipartfile" >
-					<input type="submit" value="회원추가" id="addMemberBtn">
+				<form action="/sample/addSample" method="post" enctype="multipart/form-data" id="addMemberForm">
+					<div>
+						ID : <input type="text" name="sampleId" id="sampleId" class="form-control mb-2">
+						<span id="idHelper"></span>
+					</div>
+					<div>
+						PW : <input type="password" name="samplePw" id="samplePw" class="form-control mb-2">
+						<span id="pwHelper"></span>
+					</div>
+					<div>
+						FILE : <input type="file" name="multipartfile" id="multipartfile">
+						<span id="fileHelper"></span>
+					</div>
+					<button type="button" id="addBtn">SAMPLE 추가</button>
 				</form>
 			</div>
 			<div class="col-md"></div>
