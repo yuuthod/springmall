@@ -180,7 +180,7 @@ public class SampleService {
 	}
 	
 	// 4-1
-	public Sample getSample(int sampleNo) {
+	public SampleAndFileList getSample(int sampleNo) {
 		System.out.println("SampleService.getSample()호출");
 		return sampleMapper.updateSampleSelectOne(sampleNo);
 	}

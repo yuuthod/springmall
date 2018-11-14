@@ -52,8 +52,17 @@
         </selectKey>
     </insert>
     <!-- 샘플 수정 폼 -->
-    <select id="updateSampleSelectOne" parameterType="int" resultType="com.example.springmall.sample.vo.Sample">
-    	SELECT sample_no as sampleNo, sample_id as sampleId, sample_pw as samplePw FROM sample WHERE sample_no=#{sampleNo}
+    <select id="updateSampleSelectOne" parameterType="int" resultType="com.example.springmall.sample.vo.SampleAndFileList">
+    	SELECT 
+		   s.sample_no as sampleNo
+		  ,s.sample_id as sampleId
+		  ,s.sample_pw as samplePw
+		  ,sf.samplefile_name as samplefileName
+		  ,sf.samplefile_ext as samplefileExt
+		FROM sample as s
+		INNER JOIN samplefile as sf
+		ON s.sample_no = sf.sample_no
+		WHERE s.sample_no = #{sampleNo}
     </select>
     <!-- 샘플 수정 액션 -->
     <update id="updateSample" parameterType="com.example.springmall.sample.vo.Sample">

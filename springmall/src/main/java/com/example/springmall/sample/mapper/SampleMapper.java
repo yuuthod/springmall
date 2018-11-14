@@ -23,7 +23,7 @@ public interface SampleMapper {
 	// 4-1. update
 	int updateSample(Sample sample);
 	// 4-2. update select one
-	public abstract Sample updateSampleSelectOne(int sampleNo);
+	public abstract SampleAndFileList updateSampleSelectOne(int sampleNo);
 //  ─────────────── <- 이 두개가 붙어있어야 '무조건' 추상메서드인데,
 //	interface는 '추상메서드'만 가질 수 있기때문에  추상메서드에 무조건 붙어있어야 하는 public과 abstract이 생략 되어있다.
 	// 5. login select

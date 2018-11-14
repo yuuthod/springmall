@@ -5,6 +5,7 @@ import java.sql.Date;
 public class SampleAndFileList {
 	private int sampleNo;
 	private String sampleId;
+	private String samplePw;
 	private String samplefilePath;
 	private String samplefileName;
 	private String samplefileExt;
@@ -20,6 +21,12 @@ public class SampleAndFileList {
 	}
 	public void setSampleId(String sampleId) {
 		this.sampleId = sampleId;
+	}
+	public String getSamplePw() {
+		return samplePw;
+	}
+	public void setSamplePw(String samplePw) {
+		this.samplePw = samplePw;
 	}
 	public String getSamplefilePath() {
 		return samplefilePath;
@@ -45,6 +52,4 @@ public class SampleAndFileList {
 	public void setSamplefileDate(Date samplefileDate) {
 		this.samplefileDate = samplefileDate;
 	}
-	
-	
 }

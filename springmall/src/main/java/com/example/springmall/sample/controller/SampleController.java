@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.springmall.sample.service.SampleService;
 import com.example.springmall.sample.vo.Sample;
+import com.example.springmall.sample.vo.SampleAndFileList;
 import com.example.springmall.sample.vo.SampleRequest;
 
 @Controller
@@ -93,8 +94,8 @@ public class SampleController {
 	@RequestMapping(value = "/sample/modyfySample", method = RequestMethod.GET)
 	public String modifySample(Model model, @RequestParam(value = "sampleNo", defaultValue = "1") int sampleNo) {
 		System.out.println("SampleController.addSample().get호출");
-		Sample sample = sampleService.getSample(sampleNo);
-		model.addAttribute("sample", sample);
+		SampleAndFileList sampleAndFileList = sampleService.getSample(sampleNo);
+		model.addAttribute("sample", sampleAndFileList);
 		return "/sample/modyfySample";
 	}
 

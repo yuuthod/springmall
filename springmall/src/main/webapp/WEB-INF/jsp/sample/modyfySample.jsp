@@ -47,19 +47,33 @@ $(document).ready(()=>{
 <body>
 	<div class="container">
 		<div class="row">
-			<div class="col-md"></div>
-			<div class="col-md">
+			<div class="col-3"></div>
+			<div class="col-6">
 				<h1>회원수정</h1>
 				<form action="/sample/modyfySample" method="post" id="addMemberForm">
 					<input value="${ sample.sampleNo }" type="text" name="sampleNo" class="form-control mb-2" readonly>
-					<input value="${ sample.sampleId }" type="text" name="sampleId" id="sampleId"  class="form-control mb-2">
-					<span id="idHelper"></span>
-					<input value="${ sample.samplePw }" type="password" name="samplePw" id="samplePw" class="form-control mb-2">
-					<span id="pwHelper"></span>
+					<div>
+						ID : <input value="${ sample.sampleId }" type="text" name="sampleId" id="sampleId"  class="form-control mb-2">
+						<span id="idHelper"></span>
+					</div>
+					<div>
+						PW : <input value="${ sample.samplePw }" type="password" name="samplePw" id="samplePw" class="form-control mb-2">
+						<span id="pwHelper"></span>
+					</div>
+					<div>
+						기존 FILE : ${ sample.samplefileName }.${ sample.samplefileExt }
+					</div>
+					<br>
+					<div>
+						재업로드 FILE
+						<input type="file" name="multipartfile" id="multipartfile" class="form-control-file border">
+						<span id="fileHelper"></span>
+					</div>
+					<br>
 					<div><input type="button" value="회원수정" id="addMemberBtn" class="btn btn-primary"></div>
 				</form>
 			</div>
-			<div class="col-md"></div>
+			<div class="col-3"></div>
 		</div>
 	</div>
 </body>
