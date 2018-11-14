@@ -7,10 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.example.springmall.sample.mapper.SampleFileMapper;
 import com.example.springmall.sample.mapper.SampleMapper;
@@ -35,7 +40,7 @@ public class SampleService {
 	// delete -> remove
 	
 	// 3 입력 액션 수정
-	public int addSample(SampleRequest sampleRequest) {
+	public int addSample(SampleRequest sampleRequest, HttpServletRequest request) {
 		Sample sample = new Sample();
 		
 		sample.setSampleId(sampleRequest.getSampleId());
@@ -49,9 +54,24 @@ public class SampleService {
 		// 2. sampleNo
 		sampleFile.setSampleNo(sample.getSampleNo());
 		
-		// 3. samplefilePath
-		String path = "c:\\uploads"; //복잡한 루틴을 통해서
-		sampleFile.setSamplefilePath(path);
+		// 3. samplefilePath​
+		//내가 정한 경로
+		String path = "realPath/uploads"; //복잡한 루틴을 통해서
+		//상대경로
+		String pathReal = request.getSession().getServletContext().getRealPath(path);
+		sampleFile.setSamplefilePath(pathReal);
+		
+		//경로에 폴더가 없을 시
+		File realPath = new File(pathReal); 
+		//상대경로에 폴더가 없을 시, 폴더생성
+			if(realPath.exists() == false) {
+				realPath.mkdirs();
+				System.out.println("폴더 생성 성공");
+			}else if(realPath.exists()) {
+				System.out.println("이미 폴더 있음");
+			}else {
+				System.out.println("폴더 생성실패");
+			}
 		
 		// 4. 확장자 추출
 		// originalFileName : 이름.확장자
@@ -77,8 +97,9 @@ public class SampleService {
 		// 	파일업로드
 		//	1. 내가 원하는 이름의 빈파일을 하나 만들자
 		//	transferTo()의 매개변수 타입에 맞춘 후 입력데이터
-		File f = new File(path+"\\"+fileName+"."+ext);
+		File f = new File(pathReal+"\\"+fileName+"."+ext);
 		System.out.println("f: " + f);
+		
 		//	2. multipartFile파일을 빈파일로 복사하자.
 		try {
 			multipartFile.transferTo(f);

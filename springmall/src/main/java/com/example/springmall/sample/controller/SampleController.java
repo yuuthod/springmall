@@ -75,13 +75,13 @@ public class SampleController {
 
 	// 3-2.입력 액션
 	@RequestMapping(value = "/sample/addSample", method = RequestMethod.POST)
-	public String addSample(SampleRequest sampleRequest) {
+	public String addSample(SampleRequest sampleRequest, HttpServletRequest request) {
 		System.out.println("SampleController.addSample().post호출");
 		// Sample 의 다양한 모양이 존재할 수 있다.
 		// command객체의 멤버변수 == input태그 name속성 --> setter에 입력
 		System.out.println("sampleRequest.getMultipartFile() :" + sampleRequest.getMultipartfile());
-
-		sampleService.addSample(sampleRequest);
+		
+		sampleService.addSample(sampleRequest, request);
 		return "redirect:/sample/sampleList";
 	}
 
