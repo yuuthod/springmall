@@ -66,7 +66,7 @@
 							<td>SAMPLE FILE</td>
 							<td>UPLOAD DATE</td>
 							<td>DELETE</td>
-							<td>UPDATE</td>
+							<td>DETAIL</td>
 						</tr>
 					</thead>
 					<tbody>
@@ -77,7 +77,7 @@
 								<td>${ sample.samplefilePath }<span>\</span>${ sample.samplefileName }<span>.</span>${ sample.samplefileExt }</td>
 								<td>${ sample.samplefileDate }</td>
 								<td><a href="/sample/removeSample?sampleNo=${ sample.sampleNo }">DELETE</a></td>
-								<td><a href="/sample/modyfySample?sampleNo=${ sample.sampleNo }">UPDATE</a></td>
+								<td><a href="/sample/detailSample?sampleNo=${ sample.sampleNo }">DETAIL</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

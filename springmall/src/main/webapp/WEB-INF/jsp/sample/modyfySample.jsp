@@ -50,7 +50,7 @@ $(document).ready(()=>{
 			<div class="col-3"></div>
 			<div class="col-6">
 				<h1>회원수정</h1>
-				<form action="/sample/modyfySample" method="post" id="addMemberForm">
+				<form action="/sample/modyfySample" method="post" id="addMemberForm" enctype="multipart/form-data">
 					<input value="${ sample.sampleNo }" type="text" name="sampleNo" class="form-control mb-2" readonly>
 					<div>
 						ID : <input value="${ sample.sampleId }" type="text" name="sampleId" id="sampleId"  class="form-control mb-2">

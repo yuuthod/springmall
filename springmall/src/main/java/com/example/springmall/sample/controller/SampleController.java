@@ -106,4 +106,13 @@ public class SampleController {
 		sampleService.modifySample(sample);
 		return "redirect:/sample/sampleList";
 	}
+	
+	// 5 상세화면
+	@RequestMapping(value = "/sample/detailSample", method = RequestMethod.GET)
+	public String detailSample(Model model, @RequestParam(value = "sampleNo", defaultValue = "1") int sampleNo) {
+		System.out.println("SampleController.addSample().get호출");
+		SampleAndFileList sampleAndFileList = sampleService.getSample(sampleNo);
+		model.addAttribute("sample", sampleAndFileList);
+		return "/sample/detailSample";
+	}
 }

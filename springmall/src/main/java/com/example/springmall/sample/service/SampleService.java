@@ -7,16 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import com.example.springmall.sample.mapper.SampleFileMapper;
 import com.example.springmall.sample.mapper.SampleMapper;
 import com.example.springmall.sample.vo.Sample;
@@ -27,6 +23,7 @@ import com.example.springmall.sample.vo.SampleRequest;
 @Service
 @Transactional
 public class SampleService {
+	
 	@Autowired
 	private SampleMapper sampleMapper;
 	
@@ -39,7 +36,7 @@ public class SampleService {
 	// update -> modify
 	// delete -> remove
 	
-	// 3 입력 액션 수정
+	// 3 입력 액션
 	public int addSample(SampleRequest sampleRequest, HttpServletRequest request) {
 		Sample sample = new Sample();
 		
@@ -188,6 +185,22 @@ public class SampleService {
 	// 4-2
 	public int modifySample(Sample sample) {
 		System.out.println("SampleService.modifySample()호출");
+		
+		//	폴더 안 파일삭제
+		//	파일 주소값을 불러오기 위한 select
+		SampleFile sampleFile = sampleFileMapper.deleteFolderSampleFile(sample.getSampleNo());
+		String path = sampleFile.getSamplefilePath();
+		String name = sampleFile.getSamplefileName();
+		String ext = sampleFile.getSamplefileExt();
+		
+		String pathAll = path+"\\"+name+"."+ext; // 삭제할 파일의 경로
+		System.out.println(pathAll + "<== pathAll");
+		File file = new File(pathAll);
+		file.delete();
+		
+		//file 삭제
+		//sampleFileMapper.deleteSampleFile(sampleNo);
+		
 		return sampleMapper.updateSample(sample);
 	}
 	
@@ -196,4 +209,6 @@ public class SampleService {
 		System.out.println("SampleService.loginSample()호출");
 		return sampleMapper.loginSample(sample);
 	}
+	
+	
 }
