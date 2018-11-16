@@ -107,7 +107,8 @@ public class SampleService {
 			e.printStackTrace();
 		}
 
-		sampleFileMapper.insertSampleFile(sampleFile);
+		int insertno = sampleFileMapper.insertSampleFile(sampleFile);
+		System.out.println("insertno :" + insertno);
 		return 0;
 	}
 	
@@ -176,32 +177,97 @@ public class SampleService {
 		return sampleMapper.deleteSample(sampleNo);
 	}
 	
-	// 4-1
+	// 4-1 Sample 수정 폼
 	public SampleAndFileList getSample(int sampleNo) {
 		System.out.println("SampleService.getSample()호출");
 		return sampleMapper.updateSampleSelectOne(sampleNo);
 	}
 	
-	// 4-2
-	public int modifySample(Sample sample) {
+	// 4-2 Sample 수정 액션
+	public int modifySample(SampleRequest sampleRequest,HttpServletRequest request) {
 		System.out.println("SampleService.modifySample()호출");
 		
-		//	폴더 안 파일삭제
-		//	파일 주소값을 불러오기 위한 select
-		SampleFile sampleFile = sampleFileMapper.deleteFolderSampleFile(sample.getSampleNo());
-		String path = sampleFile.getSamplefilePath();
-		String name = sampleFile.getSamplefileName();
-		String ext = sampleFile.getSamplefileExt();
 		
-		String pathAll = path+"\\"+name+"."+ext; // 삭제할 파일의 경로
-		System.out.println(pathAll + "<== pathAll");
-		File file = new File(pathAll);
-		file.delete();
+		//Sample 수정
+		Sample sample = new Sample();
+		sample.setSampleNo(sampleRequest.getSampleNo());
+		sample.setSampleId(sampleRequest.getSampleId());
+		sample.setSamplePw(sampleRequest.getSamplePw());
+		sampleMapper.updateSample(sample);
 		
-		//file 삭제
-		//sampleFileMapper.deleteSampleFile(sampleNo);
+		//Sample File 수정
 		
-		return sampleMapper.updateSample(sample);
+		//samplefile update 데이터 채워서 보내기
+		SampleFile sampleFileUpdate = new SampleFile();
+		
+		//samplefile 얻기
+		MultipartFile multipartFile = sampleRequest.getMultipartfile();
+
+		System.out.println("multipartFile.getName() : "+multipartFile.getName());
+		//	파일을 새로 업로드 하지 않았을때 빈파일이 만들어지는걸 방지하기 위해  multipartFile 값이 없을때를 조건문으로 한 if문안에 넣어준다
+		if(multipartFile.getOriginalFilename().equals("")) {
+			System.out.println("파일 변경 안함");
+		}else {
+			// SampleNo
+			sampleFileUpdate.setSamplefileNo(sampleRequest.getSampleNo());
+			
+			// 3. samplefilePath
+			String updatePath = request.getSession().getServletContext().getRealPath("realPath/uploads");
+			sampleFileUpdate.setSamplefilePath(updatePath);
+			
+			// 4. 확장자 추출
+			String originalFileName = multipartFile.getOriginalFilename();
+			System.out.println("originalFileName: " + originalFileName);
+			int idx = originalFileName.lastIndexOf(".");
+			String updateExt = originalFileName.substring(idx+1);
+			System.out.println("updateExt: " + updateExt);
+			sampleFileUpdate.setSamplefileExt(updateExt);
+			
+			// 5. 파일이름
+			//파일이름 UUID를 이용해 랜덤으로 생성 , UUID타입에서 다시 스트링으로 변경
+			//String updateFileName = UUID.randomUUID().toString();
+			String updateFileName = "aaa";
+			System.out.println("fileName: " + updateFileName);
+			sampleFileUpdate.setSamplefileName(updateFileName);	
+			
+			// 6. 타입
+			sampleFileUpdate.setSamplefileFile(multipartFile.getContentType());
+			
+			// 7. 크기
+			sampleFileUpdate.setSamplefileSize(multipartFile.getSize());
+
+			//	폴더 안 파일삭제
+			//	파일 주소값을 불러오기 위한 select
+			SampleFile sampleFileDelete = sampleFileMapper.deleteFolderSampleFile(sampleRequest.getSampleNo());
+			String path = sampleFileDelete.getSamplefilePath();
+			String fileName = sampleFileDelete.getSamplefileName();
+			String ext = sampleFileDelete.getSamplefileExt();
+			
+			String pathAll = path+"\\"+fileName+"."+ext; // 삭제할 파일의 경로
+			System.out.println(pathAll + "<== pathAll delete");
+			File file = new File(pathAll);
+			file.delete();
+			
+			//	1. 내가 원하는 이름의 빈파일을 하나 만들자
+			File updatFile = new File(updatePath+"\\"+updateFileName+"."+updateExt);
+			System.out.println(updatFile + "<== updatFile update");
+			//	transferTo()의 매개변수 타입에 맞춘 후 입력데이터
+			//	2. multipartFile파일을 빈파일로 복사하자.
+			try {
+				multipartFile.transferTo(updatFile);
+				System.out.println("예외처리도 잘 실행");
+			} catch (IllegalStateException e) { //상태오류
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			int check = sampleFileMapper.updateSampleFile(sampleFileUpdate);
+			System.out.println("sampleFileUpdate check) :"+check);
+			System.out.println("sampleFileUpdate.getSamplefileName()) :"+sampleFileUpdate.getSamplefileName());
+			System.out.println("sampleFileUpdate.getSamplefileNo() :"+sampleFileUpdate.getSamplefileNo());
+		}
+		return 0;
 	}
 	
 	// 5.

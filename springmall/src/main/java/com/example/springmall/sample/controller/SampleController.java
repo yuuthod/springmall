@@ -101,9 +101,9 @@ public class SampleController {
 
 	// 4-2 수정 액션
 	@RequestMapping(value = "/sample/modyfySample", method = RequestMethod.POST)
-	public String modifySample(Sample sample) {
+	public String modifySample(SampleRequest sampleRequest,HttpServletRequest request) {
 		System.out.println("SampleController.modifySample().post호출");
-		sampleService.modifySample(sample);
+		sampleService.modifySample(sampleRequest, request);
 		return "redirect:/sample/sampleList";
 	}
 	

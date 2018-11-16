@@ -7,7 +7,8 @@
     <!-- 모든 샘플 데이터 -->
     <select id="selectSampleAll" resultType="Map" parameterType="Map">
         SELECT 
-         s.sample_no as sampleNo
+         sf.samplefile_no as samplefileNo
+        ,s.sample_no as sampleNo
         ,s.sample_id as sampleId
         ,sf.samplefile_path as samplefilePath
         ,sf.samplefile_name as samplefileName
@@ -23,7 +24,7 @@
             <when test="category == 'fileExt'">WHERE sf.samplefile_ext = #{search}</when>
     		<otherwise></otherwise>
     	</choose>
-    	ORDER BY s.sample_no
+    	ORDER BY sf.samplefile_no
         DESC limit #{startRow},#{rowPerPage}
     </select>
     <!-- 샘플데이터 pageing을 위한 count / 검색 후 페이징을 위해 choose문 추가 -->
@@ -66,7 +67,7 @@
     </select>
     <!-- 샘플 수정 액션 -->
     <update id="updateSample" parameterType="com.example.springmall.sample.vo.Sample">
-    	UPDATE sample SET sample_id=#{sampleId}, sample_pw=#{samplePw} WHERE no=#{sampleNo}
+    	UPDATE sample SET sample_id=#{sampleId}, sample_pw=#{samplePw} WHERE sample_no=#{sampleNo}
     </update>
     <!-- 샘플 로그인 -->
     <select id="loginSample" parameterType="com.example.springmall.sample.vo.Sample" resultType="com.example.springmall.sample.vo.Sample">

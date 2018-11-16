@@ -3,6 +3,7 @@ package com.example.springmall.sample.vo;
 import java.sql.Date;
 
 public class SampleAndFileList {
+	private int samplefileNo;
 	private int sampleNo;
 	private String sampleId;
 	private String samplePw;
@@ -10,6 +11,12 @@ public class SampleAndFileList {
 	private String samplefileName;
 	private String samplefileExt;
 	private Date samplefileDate;
+	public int getSamplefileNo() {
+		return samplefileNo;
+	}
+	public void setSamplefileNo(int samplefileNo) {
+		this.samplefileNo = samplefileNo;
+	}
 	public int getSampleNo() {
 		return sampleNo;
 	}
