@@ -187,14 +187,6 @@ public class SampleService {
 	public int modifySample(SampleRequest sampleRequest,HttpServletRequest request) {
 		System.out.println("SampleService.modifySample()호출");
 		
-		
-		//Sample 수정
-		Sample sample = new Sample();
-		sample.setSampleNo(sampleRequest.getSampleNo());
-		sample.setSampleId(sampleRequest.getSampleId());
-		sample.setSamplePw(sampleRequest.getSamplePw());
-		sampleMapper.updateSample(sample);
-		
 		//Sample File 수정
 		
 		//samplefile update 데이터 채워서 보내기
@@ -209,7 +201,7 @@ public class SampleService {
 			System.out.println("파일 변경 안함");
 		}else {
 			// SampleNo
-			sampleFileUpdate.setSamplefileNo(sampleRequest.getSampleNo());
+			sampleFileUpdate.setSampleNo(sampleRequest.getSampleNo());
 			
 			// 3. samplefilePath
 			String updatePath = request.getSession().getServletContext().getRealPath("realPath/uploads");
@@ -225,8 +217,7 @@ public class SampleService {
 			
 			// 5. 파일이름
 			//파일이름 UUID를 이용해 랜덤으로 생성 , UUID타입에서 다시 스트링으로 변경
-			//String updateFileName = UUID.randomUUID().toString();
-			String updateFileName = "aaa";
+			String updateFileName = UUID.randomUUID().toString();
 			System.out.println("fileName: " + updateFileName);
 			sampleFileUpdate.setSamplefileName(updateFileName);	
 			
@@ -265,8 +256,16 @@ public class SampleService {
 			int check = sampleFileMapper.updateSampleFile(sampleFileUpdate);
 			System.out.println("sampleFileUpdate check) :"+check);
 			System.out.println("sampleFileUpdate.getSamplefileName()) :"+sampleFileUpdate.getSamplefileName());
-			System.out.println("sampleFileUpdate.getSamplefileNo() :"+sampleFileUpdate.getSamplefileNo());
+			System.out.println("sampleFileUpdate.getSampleNo() :"+sampleFileUpdate.getSampleNo());
 		}
+		
+		//Sample 수정
+		Sample sample = new Sample();
+		sample.setSampleNo(sampleRequest.getSampleNo());
+		sample.setSampleId(sampleRequest.getSampleId());
+		sample.setSamplePw(sampleRequest.getSamplePw());
+		sampleMapper.updateSample(sample);
+		
 		return 0;
 	}
 	
