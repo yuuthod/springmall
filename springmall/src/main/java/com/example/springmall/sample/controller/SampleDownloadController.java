@@ -60,10 +60,12 @@ public class SampleDownloadController {
 			// 응답할때 타입을 구해놓은 mimetype으로 셋팅해준다.
 			response.setContentType(mimeType);
 			
+			// String.format : 사용자 지정 숫자 형식 문자열
+			// System.out.println 처럼 console에 문자열을 출력하는 코드인데, 위치나 순서를 정할 수 있다.
+			
 			//파일 뷰 기능
 			//response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
 
-			//Here we have mentioned it to show as attachment
 			//파일 다운로드 기능
 			response.setHeader("Content-Disposition", String.format("attachment; filename=\"" + file.getName() + "\""));
 
