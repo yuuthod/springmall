@@ -72,7 +72,7 @@ public class SampleDownloadController {
 			/*
 			1) "Content-disposition: attachment"
 				브라우저 인식 파일확장자를 포함하여 모든 확장자의 파일들에 대해, 다운로드시 무조건 "파일 다운로드" 대화상자가 뜨도록 하는 헤더속성이다.
-				즉 모든 파일이 무조건 다운로드 된다고 생각하면 된다.
+				즉 모든 파일이 무조건 다운로드 된다.
 				
 			2) "Content-disposition: inline"
 				브라우저 인식 파일확장자를 가진 파일들에 대해서는 웹브라우저 상에서 바로 파일을 열고, 그외의 파일들에 대해서는 "파일 다운로드" 대화상자가 뜨도록 하는 헤더속성이다.
@@ -86,17 +86,40 @@ public class SampleDownloadController {
 			//inline
 			//response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
 			
-			//fullbeffered 방식으로 동작할때는 setContentLength 가 설정되어 있어야 한다. 그렇지 않으면 파일크기를 알 수 없어 계속 기다림
-			//beffered : 저속의 장치가 작업을 추리하는 동안 고속의 장치가 기다려야 하는 현상을 줄여주는 기술
+			//파일크기를 알기위해 셋팅
+			//응답의 크기(바이트개수)를 의미
 			response.setContentLength((int) file.length());
 			System.out.println("response.setContentLength : "+request.getContentLength());
 			
 			
+			/* IO(입출력)을 사용할때
+			 * FileInputStream만으로도 충분히 파일을 다운받을 수 있다.
+			 * FileInputStream은 데이터를 한줄씩 한줄씨 보냄으로 파일이 무거워질수록 속도가 느려진다.
+			 * 
+			 * 때문에 BufferedInputStream을 같이 사용해준다.
+			 * BufferedInputStream은 데이터를 모두 받기를 기다렸다가 한번에 보내주는 기능으로
+			 * 직접적인 처리는 못하지만 IO의 성능(속도)을 향상시켜주는(오버헤드를 줄여주는) 역할을 해준다.
+			 * 
+			 * + 테스트 결과 : 파일이 가벼울땐 오히려 BufferedInputStream을 사용한코드가 느렸지만,
+			 * + 파일이 무거워질수록 BufferedInputStream이 훨씬 빠르다는것을 알 수 있었다.
+			 */
+			
+			//BufferedInputStream 성능테스트 
+			//long start = System.currentTimeMillis();
+			//long end = System.currentTimeMillis();
+			//System.out.println("성능테스트 시간 : "+(end-start));
+			//System.out.println("end : "+end+" /  start : "+start);
+			
+			//InputStream inputStream = new FileInputStream(file);
+			
 			InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+			
 			System.out.println("inputStream : " + inputStream);
 			
+			//스프링프레임워크 유틸 패키지에 존재하는 FileCopyUtils클래스
+			// FileCopyUtils : 파일 및 스트림 복사를 위한 간단한 유틸리티 메소드의 집합체
 			FileCopyUtils.copy(inputStream, response.getOutputStream());
-
+			
 		}
 	}
 }
