@@ -5,7 +5,7 @@
   
 <mapper namespace="com.example.springmall.sample.mapper.SampleMapper">
     <!-- 모든 샘플 데이터 -->
-    <select id="selectSampleAll" resultType="Map" parameterType="Map">
+    <select id="selectSampleAll" resultType="com.example.springmall.sample.vo.SampleAndFileList" parameterType="Map">
         SELECT 
          sf.samplefile_no as samplefileNo
         ,s.sample_no as sampleNo
@@ -24,6 +24,7 @@
             <when test="category == 'fileExt'">WHERE sf.samplefile_ext = #{search}</when>
     		<otherwise></otherwise>
     	</choose>
+        GROUP BY s.sample_no
     	ORDER BY sf.samplefile_no
         DESC limit #{startRow},#{rowPerPage}
     </select>

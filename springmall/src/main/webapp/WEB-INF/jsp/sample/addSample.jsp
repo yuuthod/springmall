@@ -90,7 +90,7 @@ $(document).ready(()=>{
 						<span id="pwHelper"></span>
 					</div>
 					<div>
-						FILE : <input type="file" name="multipartfile" id="multipartfile">
+						FILE : <input type="file" name="multipartfile" id="multipartfile" multiple="multiple">
 						<span id="fileHelper"></span>
 					</div>
 					<button type="button" id="addBtn">SAMPLE 추가</button>

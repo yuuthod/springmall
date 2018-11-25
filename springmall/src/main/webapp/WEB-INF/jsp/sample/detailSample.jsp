@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +21,7 @@
 			<div class="col-3"></div>
 			<div class="col-6">
 				<h1>회원수정</h1>
+				<c:forEach var="sample" items="${samplelist}" end="0">
 					<br>
 					NO :
 					<input value="${ sample.sampleNo }" type="text" class="form-control mb-2" readonly>
@@ -27,17 +29,20 @@
 						ID : <input value="${ sample.sampleId }" type="text" class="form-control mb-2" readonly>
 						<span id="idHelper"></span>
 					</div>
-					<div>
-						기존 FILE
-						<a href="/download/file/${ sample.samplefileName }.${ sample.samplefileExt }">
+				</c:forEach>
+				<div>
+					기존 FILE
+					<c:forEach var="sample" items="${samplelist}">
+					<a href="/download/file/${ sample.samplefileName }.${ sample.samplefileExt }">
 							${ sample.samplefileName }.${ sample.samplefileExt }
-						</a>
-					</div>
-					<br>
-					<div>
-						<a href="/sample/modyfySample?sampleNo=${ sample.sampleNo }" class="btn btn-dark">수정</a>
-						<a href="/sample/sampleList" class="btn btn-secondary">목록으로</a>
-					</div>
+					</a><br>
+					</c:forEach>
+				</div>
+				<br>
+				<div>
+					<a href="/sample/modyfySample?sampleNo=${ sample.sampleNo }" class="btn btn-dark">수정</a>
+					<a href="/sample/sampleList" class="btn btn-secondary">목록으로</a>
+				</div>
 			</div>
 			<div class="col-3"></div>
 		</div>

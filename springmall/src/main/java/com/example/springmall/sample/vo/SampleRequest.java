@@ -1,12 +1,14 @@
 package com.example.springmall.sample.vo;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public class SampleRequest {
 	private int sampleNo;
 	private String sampleId;
 	private String samplePw;
-	private MultipartFile multipartfile;
+	private List<MultipartFile> multipartfile;
 	public int getSampleNo() {
 		return sampleNo;
 	}
@@ -25,11 +27,10 @@ public class SampleRequest {
 	public void setSamplePw(String samplePw) {
 		this.samplePw = samplePw;
 	}
-	public MultipartFile getMultipartfile() {
+	public List<MultipartFile> getMultipartfile() {
 		return multipartfile;
 	}
-	public void setMultipartfile(MultipartFile multipartfile) {
+	public void setMultipartfile(List<MultipartFile> multipartfile) {
 		this.multipartfile = multipartfile;
 	}
-	
 }

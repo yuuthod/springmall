@@ -2,6 +2,7 @@ package com.example.springmall.sample.controller;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.springmall.sample.service.SampleService;
-import com.example.springmall.sample.vo.Sample;
 import com.example.springmall.sample.vo.SampleAndFileList;
 import com.example.springmall.sample.vo.SampleRequest;
 
@@ -47,7 +47,7 @@ public class SampleController {
 		searchMap.put("currentPage", currentPage);
 
 		Map<String, Object> listPageAll = sampleService.getSampleAll(searchMap);
-
+		
 		model.addAttribute("sampleList", listPageAll.get("list"));
 		model.addAttribute("lastPage", listPageAll.get("lastPage"));
 		model.addAttribute("currentPage", listPageAll.get("currentPage"));
@@ -94,8 +94,9 @@ public class SampleController {
 	@RequestMapping(value = "/sample/modyfySample", method = RequestMethod.GET)
 	public String modifySample(Model model, @RequestParam(value = "sampleNo", defaultValue = "1") int sampleNo) {
 		System.out.println("SampleController.addSample().get호출");
-		SampleAndFileList sampleAndFileList = sampleService.getSample(sampleNo);
+		List<SampleAndFileList> sampleAndFileList = sampleService.getSample(sampleNo);
 		model.addAttribute("sample", sampleAndFileList);
+
 		return "/sample/modyfySample";
 	}
 
@@ -110,9 +111,14 @@ public class SampleController {
 	// 5 상세화면
 	@RequestMapping(value = "/sample/detailSample", method = RequestMethod.GET)
 	public String detailSample(Model model, @RequestParam(value = "sampleNo", defaultValue = "1") int sampleNo) {
-		System.out.println("SampleController.addSample().get호출");
-		SampleAndFileList sampleAndFileList = sampleService.getSample(sampleNo);
-		model.addAttribute("sample", sampleAndFileList);
+		System.out.println("SampleController.detailSample().get호출");
+		List<SampleAndFileList> sampleAndFileList = sampleService.getSample(sampleNo);
+		for(int i=0; i<sampleAndFileList.size(); i++) {
+			System.out.println("존재하는 파일 갯수 : " + sampleAndFileList.get(i).getSamplefileName());
+		}
+		
+		model.addAttribute("samplelist", sampleAndFileList);
+		
 		return "/sample/detailSample";
 	}
 }
