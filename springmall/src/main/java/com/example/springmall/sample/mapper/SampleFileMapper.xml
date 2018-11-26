@@ -41,7 +41,7 @@
 			, sf.samplefile_file = #{samplefileFile}
 			, sf.samplefile_size = #{samplefileSize}
 			, sf.samplefile_date = now()
-		WHERE sf.sample_no = #{sampleNo}
+		WHERE sf.sample_no = #{sampleNo} AND sf.samplefile_no = #{samplefileNo}
     </update>
     
     <!-- 샘플파일 삭제 전 폴더 안 파일을 삭제하기 위해 파일 주소 로드 -->

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,17 +52,24 @@ $(document).ready(()=>{
 			<div class="col-6">
 				<h1>회원수정</h1>
 				<form action="/sample/modyfySample" method="post" id="addMemberForm" enctype="multipart/form-data">
-					<input value="${ sample.sampleNo }" type="text" name="sampleNo" class="form-control mb-2" readonly>
+					<c:forEach var="sample" items="${samplelist}" end="0">
+						<br>
+						NO :
+						<input value="${ sample.sampleNo }" type="text" class="form-control mb-2" readonly>
+						<div>
+							ID : <input value="${ sample.sampleId }" type="text" class="form-control mb-2">
+							<span id="idHelper"></span>
+						</div>
+					</c:forEach>
 					<div>
-						ID : <input value="${ sample.sampleId }" type="text" name="sampleId" id="sampleId"  class="form-control mb-2">
-						<span id="idHelper"></span>
-					</div>
-					<div>
-						PW : <input value="${ sample.samplePw }" type="password" name="samplePw" id="samplePw" class="form-control mb-2">
+						PW : <input type="password" name="samplePw" id="samplePw" class="form-control mb-2">
 						<span id="pwHelper"></span>
 					</div>
 					<div>
-						기존 FILE : ${ sample.samplefileName }.${ sample.samplefileExt }
+						기존 FILE<br>
+						<c:forEach var="sample" items="${samplelist}">
+							${ sample.samplefileName }.${ sample.samplefileExt }<br>
+						</c:forEach>
 					</div>
 					<br>
 					<div>

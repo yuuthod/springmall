@@ -95,8 +95,7 @@ public class SampleController {
 	public String modifySample(Model model, @RequestParam(value = "sampleNo", defaultValue = "1") int sampleNo) {
 		System.out.println("SampleController.addSample().get호출");
 		List<SampleAndFileList> sampleAndFileList = sampleService.getSample(sampleNo);
-		model.addAttribute("sample", sampleAndFileList);
-
+		model.addAttribute("samplelist", sampleAndFileList);
 		return "/sample/modyfySample";
 	}
 
@@ -113,12 +112,7 @@ public class SampleController {
 	public String detailSample(Model model, @RequestParam(value = "sampleNo", defaultValue = "1") int sampleNo) {
 		System.out.println("SampleController.detailSample().get호출");
 		List<SampleAndFileList> sampleAndFileList = sampleService.getSample(sampleNo);
-		for(int i=0; i<sampleAndFileList.size(); i++) {
-			System.out.println("존재하는 파일 갯수 : " + sampleAndFileList.get(i).getSamplefileName());
-		}
-		
 		model.addAttribute("samplelist", sampleAndFileList);
-		
 		return "/sample/detailSample";
 	}
 }

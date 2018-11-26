@@ -24,23 +24,25 @@
 				<c:forEach var="sample" items="${samplelist}" end="0">
 					<br>
 					NO :
-					<input value="${ sample.sampleNo }" type="text" class="form-control mb-2" readonly>
+					<input value="${ sample.sampleNo }" name="sampleNo" type="text" class="form-control mb-2" readonly>
 					<div>
-						ID : <input value="${ sample.sampleId }" type="text" class="form-control mb-2" readonly>
+						ID : <input value="${ sample.sampleId }" name="sampleId" type="text" class="form-control mb-2" readonly>
 						<span id="idHelper"></span>
 					</div>
 				</c:forEach>
 				<div>
 					기존 FILE
 					<c:forEach var="sample" items="${samplelist}">
-					<a href="/download/file/${ sample.samplefileName }.${ sample.samplefileExt }">
-							${ sample.samplefileName }.${ sample.samplefileExt }
-					</a><br>
+						<a href="/download/file/${ sample.samplefileName }.${ sample.samplefileExt }">
+								${ sample.samplefileName }.${ sample.samplefileExt }
+						</a><br>
 					</c:forEach>
 				</div>
 				<br>
 				<div>
-					<a href="/sample/modyfySample?sampleNo=${ sample.sampleNo }" class="btn btn-dark">수정</a>
+					<c:forEach var="sample" items="${samplelist}" end="0">
+						<a href="/sample/modyfySample?sampleNo=${ sample.sampleNo }" class="btn btn-dark">수정</a>
+					</c:forEach>
 					<a href="/sample/sampleList" class="btn btn-secondary">목록으로</a>
 				</div>
 			</div>
